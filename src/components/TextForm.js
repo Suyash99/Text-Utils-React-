@@ -2,10 +2,32 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 export default function TextForm(props) {
+  const [mystyle, setMyStyle] = useState({
+    color: "black",
+    backgroundColor: "white",
+  });
+  const [textGen, setTextGen] = useState("Enable Dark Mode");
   const [text, setText] = useState("");
+
+  const toggleMode = () => {
+    if (textGen === "Enable Dark Mode") {
+      setMyStyle = {
+        color: "white",
+        backgroundColor: "black",
+      };
+      setTextGen = "Enable Light Mode";
+    } else {
+      setMyStyle = {
+        color: "black",
+        backgroundColor: "white",
+      };
+      setTextGen = "Enable Dark Mode";
+    }
+  };
+
   const conditionChecker = (input) => {
     if (input === "") return 0;
-    let splitVal = input.split(" ");
+    let splitVal = input.trim().split(" ");
     let emptyLen = splitVal.filter((e) => e === "").length;
     splitVal.splice(splitVal.indexOf(""), emptyLen);
     return splitVal.length;
@@ -27,7 +49,7 @@ export default function TextForm(props) {
     <>
       <div>
         <h1>{props.heading}</h1>
-        <div className="mb-3">
+        <div className="mb-3" style={mystyle}>
           <textarea
             id="myBox"
             value={text}
@@ -36,16 +58,31 @@ export default function TextForm(props) {
             rows="8"
           />
         </div>
-        <button className="btn btn-success mx-2" onClick={toUpperCASE}>
+        <button
+          className="btn btn-dark mx-2 px-2"
+          onClick={toUpperCASE}
+          style={mystyle}
+        >
           Convert to upper case
         </button>
 
-        <button className="btn btn-success mx-2" onClick={toLowerCASE}>
+        <button
+          className="btn btn-dark mx-2 px-2"
+          onClick={toLowerCASE}
+          style={mystyle}
+        >
           Convert to lower case
+        </button>
+        <button
+          className="btn btn-dark mx-2 px-2"
+          onClick={toggleMode}
+          style={mystyle}
+        >
+          {textGen}
         </button>
       </div>
 
-      <div className="container my-4">
+      <div className="container my-4" style={mystyle}>
         <h3> Your Text Summary</h3>
         <p>
           Your words have <b>{conditionChecker(text)}</b> words and{" "}
