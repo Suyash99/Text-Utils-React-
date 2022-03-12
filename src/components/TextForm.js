@@ -6,22 +6,22 @@ export default function TextForm(props) {
     color: "black",
     backgroundColor: "white",
   });
-  const [textGen, setTextGen] = useState("Enable Dark Mode");
+  const [btnText, setBtnText] = useState("Enable Dark Mode");
   const [text, setText] = useState("");
 
   const toggleMode = () => {
-    if (textGen === "Enable Dark Mode") {
-      setMyStyle = {
+    if (btnText === "Enable Dark Mode") {
+      setMyStyle({
         color: "white",
         backgroundColor: "black",
-      };
-      setTextGen = "Enable Light Mode";
+      });
+      setBtnText("Enable Light Mode");
     } else {
-      setMyStyle = {
+      setMyStyle({
         color: "black",
         backgroundColor: "white",
-      };
-      setTextGen = "Enable Dark Mode";
+      });
+      setBtnText("Enable Dark Mode");
     }
   };
 
@@ -32,6 +32,7 @@ export default function TextForm(props) {
     splitVal.splice(splitVal.indexOf(""), emptyLen);
     return splitVal.length;
   };
+
   const toUpperCASE = () => {
     let upperCaseText = text.toUpperCase();
     setText(upperCaseText);
@@ -47,7 +48,7 @@ export default function TextForm(props) {
   };
   return (
     <>
-      <div>
+      <div style={mystyle}>
         <h1>{props.heading}</h1>
         <div className="mb-3" style={mystyle}>
           <textarea
@@ -78,7 +79,7 @@ export default function TextForm(props) {
           onClick={toggleMode}
           style={mystyle}
         >
-          {textGen}
+          {btnText}
         </button>
       </div>
 
