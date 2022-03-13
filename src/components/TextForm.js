@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 export default function TextForm(props) {
+  //Defining States
   const [mystyle, setMyStyle] = useState({
     color: "black",
     backgroundColor: "white",
@@ -9,6 +10,7 @@ export default function TextForm(props) {
   const [btnText, setBtnText] = useState("Enable Dark Mode");
   const [text, setText] = useState("");
 
+  //Functions invoked on  "onClick" EVENT
   const toggleMode = () => {
     if (btnText === "Enable Dark Mode") {
       setMyStyle({
@@ -46,6 +48,8 @@ export default function TextForm(props) {
   const handleOnChange = (event) => {
     setText(event.target.value);
   };
+
+  //Main Functional Component
   return (
     <>
       <div style={mystyle}>
