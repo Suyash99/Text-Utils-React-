@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 
 export default function TextForm(props) {
   //Defining States
-  const [mystyle, setMyStyle] = useState({
-    color: "black",
-    backgroundColor: "white",
-  });
   const [text, setText] = useState("");
 
   //Functions invoked on "onClick" EVENT
