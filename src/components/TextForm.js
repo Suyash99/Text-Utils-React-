@@ -24,7 +24,7 @@ export default function TextForm(props) {
 
   const spaceHandler = () => {
     if (!text) return "";
-    let txtWithoutTrailingLeadingSpaces = text.trim().split(" ").join(" ").trim();
+    let txtWithoutTrailingLeadingSpaces = text.trim().split(" ").filter( ch => ch.trim() !== "").join(" ").trim();
     setText(txtWithoutTrailingLeadingSpaces);
   };
 
