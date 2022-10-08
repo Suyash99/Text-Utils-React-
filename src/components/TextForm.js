@@ -7,32 +7,37 @@ export default function TextForm(props) {
     color: "black",
     backgroundColor: "white",
   });
-  const [btnText, setBtnText] = useState("Enable Dark Mode");
   const [text, setText] = useState("");
 
-  //Functions invoked on  "onClick" EVENT
+  //Functions invoked on "onClick" EVENT
+  const wordCount = () => {
+    return text.split(" ").length === 1 ? 0 : text.split(" ").length;
+  };
+
   const toggleMode = () => {
-    if (btnText === "Enable Dark Mode") {
-      setMyStyle({
-        color: "white",
-        backgroundColor: "black",
-      });
-      setBtnText("Enable Light Mode");
-    } else {
+    if (props.toggleMode === "light") {
       setMyStyle({
         color: "black",
         backgroundColor: "white",
       });
-      setBtnText("Enable Dark Mode");
+    } else {
+      setMyStyle({
+        color: "white",
+        backgroundColor: "black",
+      });
     }
   };
 
-  const conditionChecker = (input) => {
-    if (input === "") return 0;
-    let splitVal = input.trim().split(" ");
-    let emptyLen = splitVal.filter((e) => e === "").length;
-    splitVal.splice(splitVal.indexOf(""), emptyLen);
-    return splitVal.length;
+  const spaceHandler = () => {
+    if (!text) return "";
+    let splitVal = text.trim().split(" ");
+    let string = "";
+    splitVal.forEach((elements) => {
+      if (elements) {
+        string += `${elements} `;
+      }
+    });
+    setText(string);
   };
 
   const toUpperCASE = () => {
@@ -70,7 +75,6 @@ export default function TextForm(props) {
         >
           Convert to upper case
         </button>
-
         <button
           className="btn btn-dark mx-2 px-2"
           onClick={toLowerCASE}
@@ -80,22 +84,21 @@ export default function TextForm(props) {
         </button>
         <button
           className="btn btn-dark mx-2 px-2"
-          onClick={toggleMode}
+          onClick={spaceHandler}
           style={mystyle}
         >
-          {btnText}
+          Remove Unnecessary Spaces
         </button>
       </div>
 
       <div className="container my-4" style={mystyle}>
         <h3> Your Text Summary</h3>
         <p>
-          Your words have <b>{conditionChecker(text)}</b> words and{" "}
-          <b>{text.length} </b>
+          Your words have <b>{wordCount()}</b> words and <b>{text.length} </b>
           characters!
           <br />
           Minutes taken to read this text (average) -{" "}
-          <b>{(0.008 * conditionChecker(text)).toFixed(2)}</b>
+          <b>{(0.008 * text.length).toFixed(2)}</b>
         </p>
 
         <h2>Preview of your Text</h2>

@@ -4,16 +4,35 @@ import About from "./components/About";
 import Navbar from "./components/Navbar";
 import TextForm from "./components/TextForm";
 function App() {
-  const [mode, setMode] = useState("Light");
+  //State
+  const [mode, setMode] = useState("light");
+  const [btnText, setBtnText] = useState("Enable Dark Mode");
+
+  //Helping Functions
+  const toggleMode = () => {
+    if (mode === "light") {
+      setMode("dark");
+      setBtnText("Disable Dark Mode");
+      document.body.style.backgroundColor = "black";
+    } else {
+      setMode("light");
+      setBtnText("Enable Dark Mode");
+      document.body.style.backgroundColor = "white";
+    }
+  };
+
   return (
     <>
       <Navbar
-        title="Test Title"
+        mode={mode}
+        title="Text Utilities"
         homeText="Home"
         aboutText="About"
+        toggleMode={toggleMode}
+        btnText={btnText}
       />
       <div className="container my-3">
-        <TextForm heading="Upper Case Converter" mode={mode} />
+        <TextForm heading="Converter" toggleMode={mode} />
       </div>
       {/* <About></About> */}
     </>
