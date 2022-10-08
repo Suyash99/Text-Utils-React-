@@ -15,17 +15,15 @@ export default function TextForm(props) {
   };
 
   const toggleMode = () => {
-    if (props.toggleMode === "light") {
-      setMyStyle({
-        color: "black",
-        backgroundColor: "white",
-      });
-    } else {
-      setMyStyle({
-        color: "white",
-        backgroundColor: "black",
-      });
-    }
+    return props.toggleMode === "light"
+      ? {
+          color: "black",
+          backgroundColor: "white",
+        }
+      : {
+          color: "white",
+          backgroundColor: "black",
+        };
   };
 
   const spaceHandler = () => {
@@ -57,9 +55,9 @@ export default function TextForm(props) {
   //Main Functional Component
   return (
     <>
-      <div style={mystyle}>
+      <div style={toggleMode()}>
         <h1>{props.heading}</h1>
-        <div className="mb-3" style={mystyle}>
+        <div className="mb-3" style={toggleMode()}>
           <textarea
             id="myBox"
             value={text}
@@ -71,27 +69,27 @@ export default function TextForm(props) {
         <button
           className="btn btn-dark mx-2 px-2"
           onClick={toUpperCASE}
-          style={mystyle}
+          style={toggleMode()}
         >
           Convert to upper case
         </button>
         <button
           className="btn btn-dark mx-2 px-2"
           onClick={toLowerCASE}
-          style={mystyle}
+          style={toggleMode()}
         >
           Convert to lower case
         </button>
         <button
           className="btn btn-dark mx-2 px-2"
           onClick={spaceHandler}
-          style={mystyle}
+          style={toggleMode()}
         >
           Remove Unnecessary Spaces
         </button>
       </div>
 
-      <div className="container my-4" style={mystyle}>
+      <div className="container my-4" style={toggleMode()}>
         <h3> Your Text Summary</h3>
         <p>
           Your words have <b>{wordCount()}</b> words and <b>{text.length} </b>
