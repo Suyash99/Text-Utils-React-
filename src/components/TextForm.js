@@ -24,14 +24,8 @@ export default function TextForm(props) {
 
   const spaceHandler = () => {
     if (!text) return "";
-    let splitVal = text.trim().split(" ");
-    let string = "";
-    splitVal.forEach((elements) => {
-      if (elements) {
-        string += `${elements} `;
-      }
-    });
-    setText(string);
+    let txtWithoutTrailingLeadingSpaces = text.trim().split(" ").join(" ").trim();
+    setText(txtWithoutTrailingLeadingSpaces);
   };
 
   const toUpperCASE = () => {
@@ -43,6 +37,17 @@ export default function TextForm(props) {
     let lowerCaseText = text.toLowerCase();
     setText(lowerCaseText);
   };
+
+  /**
+   * Toggle text case
+   */
+  const toggleCase = () => {
+    if (text === text.toLowerCase()) {
+      setText(text.toUpperCase())
+    } else {
+      setText(text.toLowerCase())
+    }
+  }
 
   const handleOnChange = (event) => {
     setText(event.target.value);
@@ -76,6 +81,15 @@ export default function TextForm(props) {
         >
           Convert to lower case
         </button>
+
+        <button
+          className="btn btn-dark mx-2 px-2"
+          onClick={toggleCase}
+          style={toggleMode()}
+        >
+          Toggle case
+        </button>
+
         <button
           className="btn btn-dark mx-2 px-2"
           onClick={spaceHandler}
@@ -86,16 +100,16 @@ export default function TextForm(props) {
       </div>
 
       <div className="container my-4" style={toggleMode()}>
-        <h3> Your Text Summary</h3>
+        <h3>Your Text Summary</h3>
         <p>
           Your words have <b>{wordCount()}</b> words and <b>{text.length} </b>
           characters!
           <br />
-          Minutes taken to read this text (average) -{" "}
+          Minutes taken to read this text (average) : {" "}
           <b>{(0.008 * text.length).toFixed(2)}</b>
         </p>
 
-        <h2>Preview of your Text</h2>
+        <h3>Preview of your Text</h3>
         <p>{text}</p>
       </div>
     </>
