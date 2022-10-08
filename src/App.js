@@ -1,13 +1,38 @@
 import "./App.css";
+import { useState } from "react";
 import About from "./components/About";
 import Navbar from "./components/Navbar";
 import TextForm from "./components/TextForm";
 function App() {
+  //State
+  const [mode, setMode] = useState("light");
+  const [btnText, setBtnText] = useState("Enable Dark Mode");
+
+  //Helping Functions
+  const toggleMode = () => {
+    if (mode === "light") {
+      setMode("dark");
+      setBtnText("Disable Dark Mode");
+      document.body.style.backgroundColor = "black";
+    } else {
+      setMode("light");
+      setBtnText("Enable Dark Mode");
+      document.body.style.backgroundColor = "white";
+    }
+  };
+
   return (
     <>
-      <Navbar title="Test Title" homeText="Home" aboutText="About"/>
+      <Navbar
+        mode={mode}
+        title="Text Utilities"
+        homeText="Home"
+        aboutText="About"
+        toggleMode={toggleMode}
+        btnText={btnText}
+      />
       <div className="container my-3">
-        <TextForm heading="Upper Case Converter" />
+        <TextForm heading="Converter" toggleMode={mode} />
       </div>
       {/* <About></About> */}
     </>
