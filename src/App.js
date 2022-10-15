@@ -13,6 +13,7 @@ function App() {
     if (mode === "light") {
       setMode("dark");
       setBtnText("Disable Dark Mode");
+      // document.body.style.backgroundColor = "#042743";
       document.body.style.backgroundColor = "black";
     } else {
       setMode("light");

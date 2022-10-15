@@ -96,7 +96,7 @@ export default function TextForm(props) {
         </p>
 
         <h2>Preview of your Text</h2>
-        <p>{text}</p>
+        <p>{text.length ? text : props.previewMode}</p>
       </div>
     </>
   );
@@ -104,8 +104,10 @@ export default function TextForm(props) {
 
 TextForm.propTypes = {
   heading: PropTypes.string,
+  previewMode: PropTypes.string,
 };
 
 TextForm.defaultProps = {
   heading: "Heading Goes Here",
+  previewMode: "Enter some text to preview",
 };
