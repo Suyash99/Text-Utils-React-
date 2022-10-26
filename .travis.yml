@@ -1,0 +1,22 @@
+sudo: required
+
+services: - docker
+
+before_install: 
+  - docker build -t text_util -f Dockerfile.dev .
+
+script: 
+  - docker run -e CI=true text_util npm run start
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: $ACCESS_KEY_ID
+  secret_access_key:
+    secure: "$SECRET_ACCESS_KEY"
+  region: "ap-south-1"
+  app: "Text Utils"
+  env: "Textutils-env"
+  bucket_name: "elasticbeanstalk-ap-south-1-524790834628"
+  bucket_path: ""
+  on:
+    branch: master
