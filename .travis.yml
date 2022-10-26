@@ -5,12 +5,11 @@ before_install:
   - docker build -t text_util -f Dockerfile.dev .
 script:
   - docker run -e CI=true text_util npm run test
-  
 deploy:
   provider: elasticbeanstalk
-  access_key_id: $ACCESS_KEY_ID
+  access_key_id: $ACCESS_KEY
   secret_access_key:
-    secure: "$SECRET_ACCESS_KEY"
+    secure: "$SECRET_ACCESS"
   region: "ap-south-1"
   app: "Text Utils"
   env: "Textutils-env"
