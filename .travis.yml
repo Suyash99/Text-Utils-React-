@@ -7,9 +7,9 @@ script:
   - docker run -e CI=true text_util npm run test
 deploy:
   provider: elasticbeanstalk
-  access_key_id: $ACCESS_KEY
+  access_key_id: $ACCESS_KEY_ID
   secret_access_key:
-    secure: "$SECRET_ACCESS"
+    secure: "$SECRET_ACCESS_KEY"
   region: "ap-south-1"
   app: "Text Utils"
   env: "Textutils-env"
