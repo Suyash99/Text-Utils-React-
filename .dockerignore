@@ -1,1 +1,7 @@
 node_modules
+build
+README.md
+.github
+.gitignore
+.git
+.travis.yml

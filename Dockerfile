@@ -7,5 +7,5 @@ RUN npm run build
 
 FROM nginx 
 EXPOSE 80
-COPY --from=buildDocker /var/app/build /usr/share/ngnix/html
+COPY --from=buildDocker /var/app/build /usr/share/nginx/html
 
