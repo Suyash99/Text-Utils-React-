@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import RenderAlert from "./RenderAlert";
 
 export default function TextForm(props) {
   //Defining States
   const [text, setText] = useState("");
+  const [msg, setMsg] = useState("")
+  const [type, setType] = useState("")
+
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
@@ -13,13 +17,13 @@ export default function TextForm(props) {
   const toggleMode = () => {
     return props.toggleMode === "light"
       ? {
-          color: "black",
-          backgroundColor: "white",
-        }
+        color: "black",
+        backgroundColor: "white",
+      }
       : {
-          color: "white",
-          backgroundColor: "black",
-        };
+        color: "white",
+        backgroundColor: "black",
+      };
   };
 
   const spaceHandler = () => {
@@ -31,16 +35,43 @@ export default function TextForm(props) {
         string += `${elements} `;
       }
     });
+    var alertMsg = ""
+    var type = "success"
+    if (!text) {
+      alertMsg = "Please enter the text to be converted!"
+      type = "warning"
+    }
+    else alertMsg = "Cleared Unneccessary Blank Spaces"
+    setMsg(alertMsg)
+    setType(type)
     setText(string);
   };
 
   const toUpperCASE = () => {
     let upperCaseText = text.toUpperCase();
+    var alertMsg = ""
+    var type = "success"
+    if (!text) {
+      alertMsg = "Please enter the text to be converted!"
+      type = "warning"
+    }
+    else alertMsg = "Converted to Uppercase successfully"
+    setMsg(alertMsg)
+    setType(type)
     setText(upperCaseText);
   };
 
   const toLowerCASE = () => {
     let lowerCaseText = text.toLowerCase();
+    var alertMsg = ""
+    var type = "success"
+    if (!text) {
+      alertMsg = "Please enter the text to be converted!"
+      type = "warning"
+    }
+    else alertMsg = "Converted to LowerCase successfully"
+    setMsg(alertMsg)
+    setType(type)
     setText(lowerCaseText);
   };
 
@@ -48,9 +79,22 @@ export default function TextForm(props) {
     setText(event.target.value);
   };
 
+  const renderSuccessMsg = (boolean, text, type) => {
+    if (boolean && !text) {
+      return <RenderAlert message={"Please Enter Text to Convert"} type={"warning"}></RenderAlert>
+    }
+    if (boolean) {
+      return <RenderAlert message={text} type={type}></RenderAlert>
+    }
+    return <></>
+  }
+
   //Main Functional Component
   return (
     <>
+      <div>
+        {renderSuccessMsg(msg ? true : false, msg, type)}
+      </div>
       <div style={toggleMode()}>
         <h1>{props.heading}</h1>
         <div className="mb-3" style={toggleMode()}>
