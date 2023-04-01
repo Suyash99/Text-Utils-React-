@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import RenderAlert from "./RenderAlert";
+import Alert from "./Alert";
 
 export default function TextForm(props) {
   //Defining States
@@ -76,19 +76,21 @@ export default function TextForm(props) {
 
   const handleOnChange = (event) => {
     setText(event.target.value);
+    setMsg("");
+    setType("");
   };
 
   const renderSuccessMsg = (boolean, text, type) => {
     if (boolean && !text) {
       return (
-        <RenderAlert
+        <Alert
           message={"Please Enter Text to Convert"}
           type={"warning"}
-        ></RenderAlert>
+        ></Alert>
       );
     }
     if (boolean) {
-      return <RenderAlert message={text} type={type}></RenderAlert>;
+      return <Alert message={text} type={type}></Alert>;
     }
     return <></>;
   };
