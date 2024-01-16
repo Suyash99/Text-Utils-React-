@@ -10,6 +10,7 @@ export default function TextForm(props) {
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
+    text=text.trim()
     return text.split(" ").length === 1 ? 0 : text.split(" ").length;
   };
 
