@@ -4,14 +4,13 @@ import Alert from "./Alert";
 
 export default function TextForm(props) {
   //Defining States
-  let [text, setText] = useState("");
+  const [text, setText] = useState("");
   const [msg, setMsg] = useState("");
   const [type, setType] = useState("");
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
-    text = text.trim();
-    return text.split(" ").length === 1 ? 0 : text.split(" ").length;
+    return text.trim().split(" ").length === 1 ? 0 : text.trim().split(" ").length;
   };
 
   const toggleMode = () => {
@@ -96,11 +95,22 @@ export default function TextForm(props) {
     return <></>;
   };
 
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+
+  const startTyping = () => {
+    setStartTime(performance.now());
+  };
+
+  const endTyping = () => {
+    setEndTime(performance.now());
+  };
+
   const calculateWordsPerMinute = () => {
     const words = wordCount();
-    const averageReadingSpeed = 200; 
-    const readingTimeInMinutes = words / averageReadingSpeed;
-    return readingTimeInMinutes > 0 ? Math.round(1 / readingTimeInMinutes) : 0;
+    const timeInSeconds = (endTyping - startTyping) / 1000; // Convert milliseconds to seconds
+    const minutes = timeInSeconds / 60; // Convert seconds to minutes
+    return Math.round(words / minutes);
   };
   //Main Functional Component
   return (
