@@ -10,7 +10,7 @@ export default function TextForm(props) {
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
-    text=text.trim()
+    text = text.trim();
     return text.split(" ").length === 1 ? 0 : text.split(" ").length;
   };
 
@@ -96,6 +96,12 @@ export default function TextForm(props) {
     return <></>;
   };
 
+  const calculateWordsPerMinute = () => {
+    const words = wordCount();
+    const averageReadingSpeed = 200; 
+    const readingTimeInMinutes = words / averageReadingSpeed;
+    return readingTimeInMinutes > 0 ? Math.round(1 / readingTimeInMinutes) : 0;
+  };
   //Main Functional Component
   return (
     <>
@@ -142,6 +148,8 @@ export default function TextForm(props) {
           <br />
           Minutes taken to read this text (average) -{" "}
           <b>{(0.008 * text.length).toFixed(2)}</b>
+          <br />
+          Estimated Words Per Minute (WPM) - <b>{calculateWordsPerMinute()}</b>
         </p>
 
         <h2>Preview of your Text</h2>
