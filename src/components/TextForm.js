@@ -4,7 +4,7 @@ import Alert from "./Alert";
 
 export default function TextForm(props) {
   //Defining States
-  const [text, setText] = useState("");
+  let [text, setText] = useState("");
   const [msg, setMsg] = useState("");
   const [type, setType] = useState("");
 
