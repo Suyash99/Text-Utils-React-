@@ -7,6 +7,8 @@ export default function TextForm(props) {
   const [text, setText] = useState("");
   const [msg, setMsg] = useState("");
   const [type, setType] = useState("");
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
@@ -46,6 +48,8 @@ export default function TextForm(props) {
     setMsg(alertMsg);
     setType(type);
     setText(string);
+    setEndTime(0)
+    setStartTime(0)
   };
 
   const toUpperCASE = () => {
@@ -59,6 +63,8 @@ export default function TextForm(props) {
     setMsg(alertMsg);
     setType(type);
     setText(upperCaseText);
+    setEndTime(0)
+    setStartTime(0)
   };
 
   const toLowerCASE = () => {
@@ -78,6 +84,11 @@ export default function TextForm(props) {
     setText(event.target.value);
     setMsg("");
     setType("");
+    setEndTime(Date.now())
+
+    if(!startTime){
+      setStartTime(Date.now())
+    }
   };
 
   const renderSuccessMsg = (boolean, text, type) => {
@@ -95,22 +106,11 @@ export default function TextForm(props) {
     return <></>;
   };
 
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
-
-  const startTyping = () => {
-    setStartTime(performance.now());
-  };
-
-  const endTyping = () => {
-    setEndTime(performance.now());
-  };
-
   const calculateWordsPerMinute = () => {
     const words = wordCount();
-    const timeInSeconds = (endTyping - startTyping) / 1000; // Convert milliseconds to seconds
+    const timeInSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
     const minutes = timeInSeconds / 60; // Convert seconds to minutes
-    return Math.round(words / minutes);
+    return minutes ? Math.round(words / minutes): 0;
   };
   //Main Functional Component
   return (
