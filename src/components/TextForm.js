@@ -7,10 +7,12 @@ export default function TextForm(props) {
   const [text, setText] = useState("");
   const [msg, setMsg] = useState("");
   const [type, setType] = useState("");
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
-    return text.split(" ").length === 1 ? 0 : text.split(" ").length;
+    return text.trim().split(" ").length === 1 ? 0 : text.trim().split(" ").length;
   };
 
   const toggleMode = () => {
@@ -46,6 +48,8 @@ export default function TextForm(props) {
     setMsg(alertMsg);
     setType(type);
     setText(string);
+    setEndTime(0)
+    setStartTime(0)
   };
 
   const toUpperCASE = () => {
@@ -59,6 +63,8 @@ export default function TextForm(props) {
     setMsg(alertMsg);
     setType(type);
     setText(upperCaseText);
+    setEndTime(0)
+    setStartTime(0)
   };
 
   const toLowerCASE = () => {
@@ -78,6 +84,11 @@ export default function TextForm(props) {
     setText(event.target.value);
     setMsg("");
     setType("");
+    setEndTime(Date.now())
+
+    if(!startTime){
+      setStartTime(Date.now())
+    }
   };
 
   const renderSuccessMsg = (boolean, text, type) => {
@@ -95,6 +106,12 @@ export default function TextForm(props) {
     return <></>;
   };
 
+  const calculateWordsPerMinute = () => {
+    const words = wordCount();
+    const timeInSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
+    const minutes = timeInSeconds / 60; // Convert seconds to minutes
+    return minutes ? Math.round(words / minutes): 0;
+  };
   //Main Functional Component
   return (
     <>
@@ -141,6 +158,8 @@ export default function TextForm(props) {
           <br />
           Minutes taken to read this text (average) -{" "}
           <b>{(0.008 * text.length).toFixed(2)}</b>
+          <br />
+          Estimated Words Per Minute (WPM) - <b>{calculateWordsPerMinute()}</b>
         </p>
 
         <h2>Preview of your Text</h2>
