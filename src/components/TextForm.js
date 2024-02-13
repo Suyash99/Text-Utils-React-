@@ -12,7 +12,7 @@ export default function TextForm(props) {
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
-    return !text.length ? 0 : text.split(/[ \n]/).filter(t => t).length
+    return !text.length ? 0 : text.split(/\s+/).filter(t => t).length
   };
 
   const toggleMode = () => {
@@ -147,16 +147,18 @@ export default function TextForm(props) {
       <div className="container my-4" style={toggleMode()}>
         <h3> Your Text Summary</h3>
         <p>
-          Your words have <button className="btn btn-light mx-1 px-10" disabled>{wordCount()} </button>words and<button className="btn btn-light mx-2 px-2" disabled>{text.length} </button>
-          characters including space and<button className="btn btn-light mx-2 px-2" disabled> {text.split(/[ \n]/).filter(t => t).join('').length}</button>excluding space!
-          <br />
-          Minutes taken to read this text (average) -{" "}<button className="btn btn-light mx-2 px-2" disabled>{(0.008 * text.length).toFixed(2)}</button>
-          <br />
-          Estimated Words Per Minute (WPM)<button className="btn btn-light mx-2 px-2" disabled>{calculateWordsPerMinute()}</button>
+          Your words have
+          <button className="btn btn-light mx-1 px-10" disabled>{wordCount()} </button>words and
+          <button className="btn btn-light mx-2 px-2" disabled>{text.length} </button>characters including space and
+          <button className="btn btn-light mx-2 px-2" disabled> {text.replace(/\s/g, '').length}</button>excluding space!
+          <br />Minutes taken to read this text (average) 
+          <button className="btn btn-light mx-2 px-2" disabled>{(0.008 * text.length).toFixed(2)}</button>
+          <br />Estimated Words Per Minute (WPM)
+          <button className="btn btn-light mx-2 px-2" disabled>{calculateWordsPerMinute()}</button>
         </p>
 
         <h2>Preview of your Text</h2>
-        <p>{text.split(/[ \n]/).filter(t => t).join('').length ? text : props.previewMode}</p>
+        <p>{text.replace(/\s/g, '').length ? text : props.previewMode}</p>
       </div>
     </>
   );
