@@ -12,19 +12,19 @@ export default function TextForm(props) {
 
   //Functions invoked on "onClick" EVENT
   const wordCount = () => {
-    return text.trim().split(" ").length === 1 ? 0 : text.trim().split(" ").length;
+    return !text.length ? 0 : text.split(/[ \n]/).filter(t => t).length
   };
 
   const toggleMode = () => {
     return props.toggleMode === "light"
       ? {
-          color: "black",
-          backgroundColor: "white",
-        }
+        color: "black",
+        backgroundColor: "white",
+      }
       : {
-          color: "white",
-          backgroundColor: "black",
-        };
+        color: "white",
+        backgroundColor: "black",
+      };
   };
 
   const spaceHandler = () => {
@@ -38,13 +38,7 @@ export default function TextForm(props) {
 
       return "";
     } else alertMsg = "Cleared Unneccessary Blank Spaces";
-    let splitVal = text.trim().split(" ");
-    let string = "";
-    splitVal.forEach((elements) => {
-      if (elements) {
-        string += `${elements} `;
-      }
-    });
+    let string = text.split(/[ \n]/).filter(t => t).map(t => t.trim()).join(" ");
     setMsg(alertMsg);
     setType(type);
     setText(string);
@@ -86,7 +80,7 @@ export default function TextForm(props) {
     setType("");
     setEndTime(Date.now())
 
-    if(!startTime){
+    if (!startTime) {
       setStartTime(Date.now())
     }
   };
@@ -110,7 +104,7 @@ export default function TextForm(props) {
     const words = wordCount();
     const timeInSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
     const minutes = timeInSeconds / 60; // Convert seconds to minutes
-    return minutes ? Math.round(words / minutes): 0;
+    return minutes ? Math.round(words / minutes) : 0;
   };
   //Main Functional Component
   return (
@@ -153,17 +147,16 @@ export default function TextForm(props) {
       <div className="container my-4" style={toggleMode()}>
         <h3> Your Text Summary</h3>
         <p>
-          Your words have <b>{wordCount()}</b> words and <b>{text.length} </b>
-          characters!
+          Your words have <button className="btn btn-light mx-1 px-10" disabled>{wordCount()} </button>words and<button className="btn btn-light mx-2 px-2" disabled>{text.length} </button>
+          characters including space and<button className="btn btn-light mx-2 px-2" disabled> {text.split(/[ \n]/).filter(t => t).join('').length}</button>excluding space!
           <br />
-          Minutes taken to read this text (average) -{" "}
-          <b>{(0.008 * text.length).toFixed(2)}</b>
+          Minutes taken to read this text (average) -{" "}<button className="btn btn-light mx-2 px-2" disabled>{(0.008 * text.length).toFixed(2)}</button>
           <br />
-          Estimated Words Per Minute (WPM) - <b>{calculateWordsPerMinute()}</b>
+          Estimated Words Per Minute (WPM)<button className="btn btn-light mx-2 px-2" disabled>{calculateWordsPerMinute()}</button>
         </p>
 
         <h2>Preview of your Text</h2>
-        <p>{text.length ? text : props.previewMode}</p>
+        <p>{text.split(/[ \n]/).filter(t => t).join('').length ? text : props.previewMode}</p>
       </div>
     </>
   );
