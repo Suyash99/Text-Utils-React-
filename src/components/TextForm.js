@@ -234,7 +234,6 @@ export default function TextForm(props) {
       <div style={toggleMode()}>
         <section className="mb-3 headerSection">
 
-          {/* <h1>{props.heading}</h1> */}
           <div className="heading">
             {props.heading}
           </div>
