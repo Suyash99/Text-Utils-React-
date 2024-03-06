@@ -208,53 +208,49 @@ export default function TextForm(props) {
     return minutes ? Math.round(words / minutes) : 0;
   };
 
+  const copyContent = async () => {
+    try {
+      if (!text?.length) throw new Error('Please enter some text to be copied');
+      await navigator.clipboard.writeText(text);
+      setMsg("Copied successfully");
+      setType("success");
+      document.getElementById("copyToClipboard").innerHTML = "Copied"
 
-  const clipboardImage = () => {
-
-    const copyContent = async () => {
-      try {
-        if (!text?.length) throw new Error('Please enter some text to be copied');
-        await navigator.clipboard.writeText(text);
-        setMsg("Copied successfully");
-        setType("success");
-
-        setTimeout(() => {
-          setMsg('');
-          setType('');
-        }, 3000)
-      } catch (error) {
-        setMsg(error.message);
-        setType("warning");
-      }
+      setTimeout(() => {
+        setMsg('');
+        setType('');
+        document.getElementById("copyToClipboard").innerHTML = "Copy To Clipboard"
+      }, 3000)
+    } catch (error) {
+      setMsg(error.message);
+      setType("warning");
     }
-
-
-    return <div>
-      <img
-        onClickCapture={copyContent}
-        alt={'Copied!'}
-        src={props.clipboard}
-        height="35rem"
-        width="35rem"
-        id="clipBoardIcon"
-      />
-    </div>
   }
-
 
   //Main Functional Component
   return (
     <>
-      <div>{renderSuccessMsg(msg, msg, type)}</div>
+      {/* <div>{renderSuccessMsg(msg, msg, type)}</div> */}
       <div style={toggleMode()}>
-        <section>
-          <h1>{props.heading}</h1>
-          
-          {/* Added clipboard image */}
-          {clipboardImage()}
+        <section className="mb-3 headerSection">
 
+          {/* <h1>{props.heading}</h1> */}
+          <div className="heading">
+            {props.heading}
+          </div>
+
+          <div className="successMessage">
+            {renderSuccessMsg(msg, msg, type)}
+          </div>
+
+          <button
+            id="copyToClipboard"
+            className="clipboardButton"
+            onClick={copyContent}
+          >Copy To Clipboard</button>
 
         </section>
+
 
         <div className="mb-3 position-relative" style={{ fontFamily: 'monospace' }}>
           <div id="lineNumberColumn" className="line-numbers position-absolute">
