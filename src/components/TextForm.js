@@ -101,12 +101,10 @@ export default function TextForm(props) {
       await navigator.clipboard.writeText(text);
       setMsg("Copied successfully");
       setType("success");
-      document.getElementById("copyToClipboard").innerHTML = "Copied"
 
       setTimeout(() => {
         setMsg('');
         setType('');
-        document.getElementById("copyToClipboard").innerHTML = "Copy To Clipboard"
       }, 3000)
     } catch (error) {
       setMsg(error.message);

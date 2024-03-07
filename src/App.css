@@ -64,8 +64,9 @@
 }
 
 .clipboardButton {
+  width: fit-content;
   justify-content: right;
-  padding: 0.6em 2em;
+  padding: 0.3em 0.7em;
   border: none;
   outline: none;
   color: rgb(255, 255, 255);
