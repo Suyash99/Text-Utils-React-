@@ -14,6 +14,169 @@ export default function TextForm(props) {
   let lines = 0
   const defaultRows = "12"
 
+
+  const toogleTextColor = () => { return { color: props.toggleMode === "light" ? "black" : "white" } }
+
+  const toggleMode = () => {
+    return props.toggleMode === "light"
+      ? {
+        color: "black",
+        backgroundColor: "white",
+      }
+      : {
+        color: "white",
+        backgroundColor: "black",
+      };
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const textArea = textAreaRef.current;
+      const lineNumberColumn = document.getElementById('lineNumberColumn');
+      if (textArea && lineNumberColumn) {
+        lineNumberColumn.scrollTop = textArea.scrollTop;
+      }
+    };
+
+    const textArea = textAreaRef.current;
+    if (textArea) {
+      textArea.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (textArea) {
+        textArea.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [text]);
+
+  const spaceHandler = () => {
+    let alertMsg = "";
+    let type = "success";
+    if (!text) {
+      alertMsg = "Please enter the text to be converted!";
+      type = "warning";
+      setMsg(alertMsg);
+      setType(type);
+
+      return "";
+    } else alertMsg = "Cleared Unneccessary Blank Spaces";
+    let string = text?.replace("\n    ", "")?.replace("\n}", "}")?.replace("\n]", "]")?.split(/[ \n]/).filter(t => t).map(t => t.trim()).join(" ");
+    setMsg(alertMsg);
+    setType(type);
+    setText(string);
+    setEndTime(0)
+    setStartTime(0)
+  };
+
+  const handleOnChange = (event) => {
+    setText(event.target.value);
+    setMsg("");
+    setType("");
+    setEndTime(Date.now())
+
+    if (!startTime) {
+      setStartTime(Date.now())
+    }
+  };
+
+  const renderSuccessMsg = (boolean, text, type) => {
+    if (boolean && !text) {
+      return (
+        <Alert
+          message={"Please Enter Text to Convert"}
+          type={"warning"}
+        ></Alert>
+      );
+    }
+    if (boolean) {
+      return <Alert message={text} type={type}></Alert>;
+    }
+    return <></>;
+  };
+
+  const copyContent = async () => {
+    try {
+      if (!text?.length) throw new Error('Please enter some text to be copied');
+      await navigator.clipboard.writeText(text);
+      setMsg("Copied successfully");
+      setType("success");
+      document.getElementById("copyToClipboard").innerHTML = "Copied"
+
+      setTimeout(() => {
+        setMsg('');
+        setType('');
+        document.getElementById("copyToClipboard").innerHTML = "Copy To Clipboard"
+      }, 3000)
+    } catch (error) {
+      setMsg(error.message);
+      setType("warning");
+    }
+  }
+
+  const getLineNumbers = () => {
+    lines = text.split("\n").length;
+    if (lines <= defaultRows) lines = defaultRows
+    return Array.from({ length: lines }, (_, index) => index + 1).join("\n");
+  };
+
+  const validateJSON = () => {
+    try {
+      let alertMsg = "";
+      let type = "success";
+      if (!text.length) {
+        throw new Error('Please enter the text to be converted!')
+      } else alertMsg = "Converted to JSON successfully";
+
+      let parsedJson = JSON.parse(text)
+      parsedJson = JSON.stringify(parsedJson, null, 4)?.toString() ?? text
+
+      setText(parsedJson);
+      setMsg(alertMsg);
+      setType(type);
+      setEndTime(0)
+      setStartTime(0)
+    } catch (error) {
+      setMsg(error.message);
+      setType("warning");
+    }
+  }
+
+  const toUpperCASE = () => {
+    let upperCaseText = text.toUpperCase();
+    let alertMsg = "";
+    let type = "success";
+    if (!text) {
+      alertMsg = "Please enter the text to be converted!";
+      type = "warning";
+    } else alertMsg = "Converted to Uppercase successfully";
+    setMsg(alertMsg);
+    setType(type);
+    setText(upperCaseText);
+    setEndTime(0)
+    setStartTime(0)
+  };
+
+  const toLowerCASE = () => {
+    let lowerCaseText = text.toLowerCase();
+    let alertMsg = "";
+    let type = "success";
+    if (!text) {
+      alertMsg = "Please enter the text to be converted!";
+      type = "warning";
+    } else alertMsg = "Converted to LowerCase successfully";
+    setMsg(alertMsg);
+    setType(type);
+    setText(lowerCaseText);
+  };
+
+  const calculateWordsPerMinute = () => {
+    const words = wordCount();
+    const timeInSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
+    const minutes = timeInSeconds / 60; // Convert seconds to minutes
+    return minutes ? Math.round(words / minutes) : 0;
+  };
+
   const isArrayOrObject = (text) => {
     try {
       if (typeof text == 'object') return 1
@@ -67,165 +230,6 @@ export default function TextForm(props) {
     return (0.008 * text.length).toFixed(2)
   }
 
-  const toggleMode = () => {
-    return props.toggleMode === "light"
-      ? {
-        color: "black",
-        backgroundColor: "white",
-      }
-      : {
-        color: "white",
-        backgroundColor: "black",
-      };
-  };
-
-  const spaceHandler = () => {
-    let alertMsg = "";
-    let type = "success";
-    if (!text) {
-      alertMsg = "Please enter the text to be converted!";
-      type = "warning";
-      setMsg(alertMsg);
-      setType(type);
-
-      return "";
-    } else alertMsg = "Cleared Unneccessary Blank Spaces";
-    let string = text?.replace("\n    ", "")?.replace("\n}", "}")?.replace("\n]", "]")?.split(/[ \n]/).filter(t => t).map(t => t.trim()).join(" ");
-    setMsg(alertMsg);
-    setType(type);
-    setText(string);
-    setEndTime(0)
-    setStartTime(0)
-  };
-
-  const validateJSON = () => {
-    try {
-      let alertMsg = "";
-      let type = "success";
-      if (!text.length) {
-        throw new Error('Please enter the text to be converted!')
-      } else alertMsg = "Converted to JSON successfully";
-
-      let parsedJson = JSON.parse(text)
-      parsedJson = JSON.stringify(parsedJson, null, 4)?.toString() ?? text
-
-      setText(parsedJson);
-      setMsg(alertMsg);
-      setType(type);
-      setEndTime(0)
-      setStartTime(0)
-    } catch (error) {
-      setMsg(error.message);
-      setType("warning");
-    }
-  }
-
-  const toUpperCASE = () => {
-    let upperCaseText = text.toUpperCase();
-    let alertMsg = "";
-    let type = "success";
-    if (!text) {
-      alertMsg = "Please enter the text to be converted!";
-      type = "warning";
-    } else alertMsg = "Converted to Uppercase successfully";
-    setMsg(alertMsg);
-    setType(type);
-    setText(upperCaseText);
-    setEndTime(0)
-    setStartTime(0)
-  };
-
-  const toLowerCASE = () => {
-    let lowerCaseText = text.toLowerCase();
-    let alertMsg = "";
-    let type = "success";
-    if (!text) {
-      alertMsg = "Please enter the text to be converted!";
-      type = "warning";
-    } else alertMsg = "Converted to LowerCase successfully";
-    setMsg(alertMsg);
-    setType(type);
-    setText(lowerCaseText);
-  };
-
-  const handleOnChange = (event) => {
-    setText(event.target.value);
-    setMsg("");
-    setType("");
-    setEndTime(Date.now())
-
-    if (!startTime) {
-      setStartTime(Date.now())
-    }
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const textArea = textAreaRef.current;
-      const lineNumberColumn = document.getElementById('lineNumberColumn');
-      if (textArea && lineNumberColumn) {
-        lineNumberColumn.scrollTop = textArea.scrollTop;
-      }
-    };
-
-    const textArea = textAreaRef.current;
-    if (textArea) {
-      textArea.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
-      if (textArea) {
-        textArea.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [text]);
-
-  const getLineNumbers = () => {
-    lines = text.split("\n").length;
-    if (lines <= defaultRows) lines = defaultRows
-    return Array.from({ length: lines }, (_, index) => index + 1).join("\n");
-  };
-
-  const renderSuccessMsg = (boolean, text, type) => {
-    if (boolean && !text) {
-      return (
-        <Alert
-          message={"Please Enter Text to Convert"}
-          type={"warning"}
-        ></Alert>
-      );
-    }
-    if (boolean) {
-      return <Alert message={text} type={type}></Alert>;
-    }
-    return <></>;
-  };
-
-  const calculateWordsPerMinute = () => {
-    const words = wordCount();
-    const timeInSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
-    const minutes = timeInSeconds / 60; // Convert seconds to minutes
-    return minutes ? Math.round(words / minutes) : 0;
-  };
-
-  const copyContent = async () => {
-    try {
-      if (!text?.length) throw new Error('Please enter some text to be copied');
-      await navigator.clipboard.writeText(text);
-      setMsg("Copied successfully");
-      setType("success");
-      document.getElementById("copyToClipboard").innerHTML = "Copied"
-
-      setTimeout(() => {
-        setMsg('');
-        setType('');
-        document.getElementById("copyToClipboard").innerHTML = "Copy To Clipboard"
-      }, 3000)
-    } catch (error) {
-      setMsg(error.message);
-      setType("warning");
-    }
-  }
 
   //Main Functional Component
   return (
@@ -234,7 +238,7 @@ export default function TextForm(props) {
       <div style={toggleMode()}>
         <section className="mb-3 headerSection">
 
-          <div className="heading">
+          <div className="heading" style={toogleTextColor()}>
             {props.heading}
           </div>
 
@@ -278,7 +282,7 @@ export default function TextForm(props) {
 
         {/* Action Buttons */}
         <button
-          className="btn btn-dark mx-2 px-2 button"
+          className="btn btn-dark mx-2 px-2 button-53"
           // className="button-27"
           onClick={toUpperCASE}
           style={toggleMode()}
@@ -287,7 +291,7 @@ export default function TextForm(props) {
         </button>
 
         <button
-          className="btn btn-dark mx-2 px-2 button"
+          className="btn btn-dark mx-2 px-2 button-53"
           onClick={toLowerCASE}
           style={toggleMode()}
         >
@@ -295,7 +299,7 @@ export default function TextForm(props) {
         </button>
 
         <button
-          className="btn btn-dark mx-2 px-2 button"
+          className="btn btn-dark mx-2 px-2 button-53"
           onClick={spaceHandler}
           style={toggleMode()}
         >
@@ -303,7 +307,7 @@ export default function TextForm(props) {
         </button>
 
         <button
-          className="btn btn-dark mx-2 px-2 button"
+          className="btn btn-dark mx-2 px-2 button-53"
           onClick={validateJSON}
           style={toggleMode()}
         >
