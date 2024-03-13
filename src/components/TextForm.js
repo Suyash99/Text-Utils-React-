@@ -10,6 +10,7 @@ export default function TextForm(props) {
   const [type, setType] = useState("");
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
+  const [collapsedNodes, setCollapsedNodes] = useState({});
   const textAreaRef = useRef(null);
   let lines = 0
   const defaultRows = "12"
@@ -27,6 +28,73 @@ export default function TextForm(props) {
         color: "white",
         backgroundColor: "black",
       };
+  };
+
+
+  const toggleCollapse = (nodeKey) => {
+    setCollapsedNodes((prevNodes) => ({
+      ...prevNodes,
+      [nodeKey]: !prevNodes[nodeKey],
+    }));
+  };
+
+  const renderExpandCollapseButton = (nodeKey) => {
+    const isCollapsed = collapsedNodes[nodeKey];
+
+    return (
+      <button
+        className="btn btn-sm btn-dark mx-1"
+        onClick={() => toggleCollapse(nodeKey)}
+        style={{
+          ...toggleMode(),
+          padding: '0.2rem 0.3rem',
+          fontSize: '0.8rem',
+        }}
+      >
+        {isCollapsed ? '+' : '-'}
+      </button>
+    );
+  };
+
+  const renderChildNode = (key, value, depth) => {
+    const indent = '_'.repeat(depth * 2)
+
+    console.log(`value: ${value}`);
+    if (typeof value === 'object' && value !== null) {
+      const isCollapsed = collapsedNodes[key];
+
+      return (
+        <div key={key}>
+          {indent}
+          {renderExpandCollapseButton(key)}
+          {key}: {isCollapsed ? '{...},' : renderJsonObject(value, depth + 1)}
+        </div>
+      );
+    } else {
+      return (
+        <div key={key}>
+          {indent}
+          {key}: {value}
+        </div>
+      );
+    }
+  };
+
+  const renderJsonObject = (jsonObject, depth) => {
+    const keys = Object.keys(jsonObject);
+
+    return (
+      <>
+        {'{'}
+        {keys.map((key, index) => (
+          <div key={key}>
+            {renderChildNode(key, jsonObject[key], depth)}
+            {index < keys.length - 1 ? ',' : ''}
+          </div>
+        ))}
+        {depth === 0 ? '}' : '}'}
+      </>
+    );
   };
 
   useEffect(() => {
@@ -113,7 +181,7 @@ export default function TextForm(props) {
   }
 
   const getLineNumbers = () => {
-    lines = text.split("\n").length;
+    lines = text?.split("\n").length;
     if (lines <= defaultRows) lines = defaultRows
     return Array.from({ length: lines }, (_, index) => index + 1).join("\n");
   };
@@ -194,7 +262,7 @@ export default function TextForm(props) {
     let words = 0;
     const countWordsInElement = (element) => {
       if (typeof element === 'string') {
-        words += element.split(/\s+/).filter(t => t).length;
+        words += element?.split(/\s+/).filter(t => t).length;
       } else if (Array.isArray(element)) {
         element.forEach(countWordsInElement);
       } else if (typeof element === 'object') {
@@ -329,6 +397,18 @@ export default function TextForm(props) {
 
         <h2>Preview of your Text</h2>
         <p>{text.replace(/\s/g, '').length ? text : props.previewMode}</p>
+
+        <div className="container my-4" style={toggleMode()}>
+          <h2>JSON view</h2>
+          <div>
+            {isArrayOrObject(text) ? (
+              renderJsonObject(JSON.parse(text), 1)
+            ) : (
+              <p>{text}</p>
+            )}
+          </div>
+        </div>
+
       </div>
     </>
   );
