@@ -9,13 +9,13 @@ function App() {
   //State
   const [mode, setMode] = useState("light");
   const [btnText, setBtnText] = useState("Enable Dark Mode");
+  
 
   //Helping Functions
   const toggleMode = () => {
     if (mode === "light") {
       setMode("dark");
       setBtnText("Disable Dark Mode");
-      // document.body.style.backgroundColor = "#042743";
       document.body.style.backgroundColor = "black";
     } else {
       setMode("light");
