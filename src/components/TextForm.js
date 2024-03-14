@@ -236,6 +236,14 @@ export default function TextForm(props) {
     setText(lowerCaseText);
   };
 
+  const clearContent = () => {
+    setText('');
+    setMsg('');
+    setType('success');
+    setStartTime(0);
+    setEndTime(0);
+  };
+
   const calculateWordsPerMinute = () => {
     const words = wordCount();
     const timeInSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
@@ -378,6 +386,13 @@ export default function TextForm(props) {
           style={toggleMode()}
         >
           Validate JSON
+        </button>
+        <button
+          className="btn btn-dark mx-2 px-2 button-53"
+          onClick={clearContent}
+          style={toggleMode()}
+        >
+          Clear
         </button>
 
       </div >
