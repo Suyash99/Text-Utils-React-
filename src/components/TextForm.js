@@ -299,9 +299,19 @@ export default function TextForm(props) {
     return text.replace(/\s/g, '').length
   }
 
+  //TODO: Need to handle countWpm implementation
   const countWpm = () => {
     if (isArrayOrObject(text)) return 0
     return (0.008 * text.length).toFixed(2)
+  }
+
+  const handleJsonView = (text) => {
+    //Will not render texts against JSON Views
+    return isArrayOrObject(text) ? (
+      renderJsonObject(JSON.parse(text), 1)
+    ) : (
+      <></>
+    )
   }
 
 
@@ -415,13 +425,7 @@ export default function TextForm(props) {
 
         <div className="container my-4" style={toggleMode()}>
           <h2>JSON view</h2>
-          <div>
-            {isArrayOrObject(text) ? (
-              renderJsonObject(JSON.parse(text), 1)
-            ) : (
-              <p>{text}</p>
-            )}
-          </div>
+          <div>{handleJsonView(text)}</div>
         </div>
 
       </div>
