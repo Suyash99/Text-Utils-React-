@@ -33,6 +33,11 @@ export default function About() {
               overriding our default variables. It's also worth noting that just
               about any HTML can go within the <code>.accordion-body</code>,
               though the transition does limit overflow.
+
+              <img 
+                alt="Contact Me"
+                src=""
+              />
             </div>
           </div>
         </div>
